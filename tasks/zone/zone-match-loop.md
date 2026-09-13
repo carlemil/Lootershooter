@@ -27,6 +27,7 @@
   - Broadcast `phase_changed(phase, phase_end_unix_ms, match_seed)` reliably; clients drive countdowns from the end timestamp so a dropped packet doesn't desync the clock. `MATCH` carries a null/zero end timestamp because it has no scheduled end.
 - `server/match/results.gd`: one scoreboard row per player — `{name, team, kills, cash_on_hand, cash_earned, cash_spent, distance_m, hot_zone_time_s, placement}` from `CashService.get_stats` and the damage system. **Cash is a displayed stat only** and never affects placement; sort by placement (team elimination order), then kills, then cash for presentation.
 - Solo mode: every player is their own team, so the same last-team-alive rule works unchanged.
+- **Death is final for the round.** There is no respawn path in `MATCH`: a `DEAD` player stays dead until `RESULTS`, keeps their peer slot, and receives snapshots as a spectator (see `zone-teams-dbno`). A peer that connects during `ORBIT`..`MATCH` is accepted into the slot list as `SPECTATOR` (never spawned into the world, no cash, no team) and becomes a normal lobby player at the next `LOBBY`. Bots never fill a slot vacated by a dead or disconnected human mid-match.
 
 ## Acceptance
 - GUT test `tests/test_match_loop.gd` driving the loop with an injected clock and fake players:
@@ -35,5 +36,6 @@
   - **No timer end:** with two teams still alive at t = 1200 s (past the 900 s circle close) the phase is still `MATCH` — the loop has not ended the match and has not picked a cash winner.
   - Wiping the last two teams on the same tick yields `RESULTS` with `winner == null` and a draw flag, not a hang.
   - Two consecutive matches: `match_seed` differs, and after the second `LOBBY` transition every player's cash is 800 and no loot nodes remain.
+  - A player killed at t = 60 s is still `DEAD` at t = 600 s with no body in the world; a peer joining at t = 200 s is `SPECTATOR`, has no `PlayerState` in the sim, and is `LOBBY`-eligible after `RESULTS`.
   - The results rows carry `cash_on_hand` but placement is unaffected by it: a losing team with more cash still places below the surviving team.
 - Run: `godot --headless -s addons/gut/gut_cmdln.gd -gexit`.

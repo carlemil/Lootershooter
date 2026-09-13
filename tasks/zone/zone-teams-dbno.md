@@ -13,7 +13,7 @@
 - `tests/test_dbno.gd` (new)
 
 ## Issue
-Team modes (duo/trio/squad, 1–4) exist only as a lobby label. In team modes a downed player should go DBNO rather than die outright — crawling, bleeding out, revivable by a teammate — and, importantly for the economy, a knocked player drops **no** cash bag until they are actually finished. After a real death the player needs something to do: spectate a living teammate, then the match.
+Team modes (duo/trio/squad, 1–4) exist only as a lobby label. Death is final for the round (no respawns; the dead spectate until results), so in team modes a downed player should go DBNO rather than die outright — crawling, bleeding out, revivable by a teammate — and, importantly for the economy, a knocked player drops **no** cash bag until they are actually finished. After a real death the player needs something to do: spectate a living teammate, then the match.
 
 ## Fix
 - `shared/match/team.gd`: `team_id` on `PlayerState`, `team_size` from the lobby mode (1 = solo → DBNO disabled entirely), helpers `teammates_of(peer)` and `alive_teams()` used by `match_loop`'s win check.

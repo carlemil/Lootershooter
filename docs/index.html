@@ -258,7 +258,7 @@
     <tr><td class="k">Server browser</td><td>A registry service of about sixty lines of Python standard library. Game servers heartbeat every 10 s; clients fetch <code>/servers</code>. In-game list shows name, map, players, ping and mode, plus direct connect by IP.</td></tr>
     <tr><td class="k">Perspective</td><td>First-person only. Arms and weapon viewmodel for yourself, a full-body model for everyone else.</td></tr>
     <tr><td class="k">Players</td><td>2–20 humans; bots fill to a configurable target (default 20). Solo, duo, trio, squad.</td></tr>
-    <tr><td class="k">Match</td><td>No hard cap. At 15:00 the circle has closed to 0 m. The match then runs on for the seconds it takes the second-to-last team to bleed out from the outside-zone damage ramp. Last team standing wins. Cash on hand is a scoreboard stat, never a tiebreak.</td></tr>
+    <tr><td class="k">Match</td><td>No hard cap. At 15:00 the circle has closed to 0 m. The match then runs on for the seconds it takes the second-to-last team to bleed out from the outside-zone damage ramp. Last team standing wins. Cash on hand is a scoreboard stat, never a tiebreak. <strong>Death is final for the round:</strong> no respawns, you spectate until it ends. Knocked is not dead; a teammate can still revive you. Anyone who joins mid-match spectates and plays the next one.</td></tr>
     <tr><td class="k">Zone</td><td>No phases. The safe circle shrinks continuously from 1200 m to zero at 15:00. Its center <em>wanders</em> along a smooth seeded noise path at up to 1.5 m/s, shown on the minimap 30 s ahead. Outside: cash drains, and health damage ramps with both the time you have spent outside and how far out you are, capped at 100% of your health per second: 60 s at the edge, 30 s at 200 m out, 15 s at 600 m out. Stepping back in resets the ramp. You really want to be inside.</td></tr>
     <tr><td class="k">Hot zones</td><td>Two or three alive at a time, spawning at 1:00, 5:00 and 9:00 and living three to four minutes. Pay cash per second to everyone inside, linear falloff from center to edge. The pot grows the longer a zone lives.</td></tr>
     <tr><td class="k">Economy</td><td>Everyone drops with $800. Income is money piles, safes, kill drops (victim's unspent cash plus a $300 bounty) and hot-zone ticks. Money is the only loot in the world. Nothing persists between matches.</td></tr>
@@ -324,7 +324,7 @@
 
   <h3 id="s3-flow">Match flow</h3>
   <ol class="flow">
-    <li><span class="t">lobby</span><div><b>Server browser → join → team select → ready</b><span>Countdown starts at two players or on the host timer. Bots fill the remaining slots.</span></div></li>
+    <li><span class="t">lobby</span><div><b>Server browser → join → team select → ready</b><span>Countdown starts at two players or on the host timer. Bots fill the remaining slots. Joining after the drop puts you in spectate until the next match.</span></div></li>
     <li><span class="t">−0:20</span><div><b>Orbit screen</b><span>Map overview. The team leader picks the drop point; teammates cluster within 150 m. Twenty seconds.</span></div></li>
     <li><span class="t">0:00</span><div><b>Reentry → freefall → chute</b><span>Five seconds of no control in the capsule, then freefall at up to 60 m/s with 15 m/s of lateral steer. The chute opens itself at 300 m or by hand any time above that for a glide.</span></div></li>
     <li><span class="t">0:00–15:00</span><div><b>The match</b><span>Circle shrinks from 1200 m to zero in a straight line. Center wanders. Hot zones open at 1:00, 5:00 and 9:00.</span></div></li>
@@ -587,7 +587,7 @@
     [44,"M4","MEDIUM","econ-armor-helmets","vest and helmet tiers, durability, visuals"],
     [45,"M5","HIGH","zone-shrinking-circle","continuous radius to zero at 15:00, wandering center from seeded noise, cash drain and damage ramp from time outside × distance; tests"],
     [46,"M5","MEDIUM","zone-hot-zones","spawn schedule, payout falloff, growing pot; tests"],
-    [47,"M5","HIGH","zone-match-loop","lobby → orbit → drop → match → results → lobby; match clock; last team alive wins, no cap or tiebreak"],
+    [47,"M5","HIGH","zone-match-loop","lobby → orbit → drop → match → results → lobby; match clock; last team alive wins, no cap or tiebreak; death is final, late joiners spectate"],
     [48,"M5","HIGH","zone-drop-in","orbit map pick, reentry → freefall → chute state machine with steering"],
     [49,"M5","MEDIUM","zone-teams-dbno","team assignment, knock-down, revive, spectate teammates"],
     [50,"M5","MEDIUM","zone-smuggler-truck","road event carrying $2500; hijack or destroy"],

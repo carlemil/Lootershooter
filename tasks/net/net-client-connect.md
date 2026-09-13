@@ -15,7 +15,7 @@
 - `tests/server/test_handshake.gd` (new)
 
 ## Issue
-The server opens an ENet host but no client can join it, and there is no agreed handshake, so the server has no name or team preference for a peer and no way to reject a mismatched build. Disconnects (timeout, quit, kick) currently leave nothing to clean up because nothing is tracked. Max 20 slots with bots filling the rest means slot accounting has to be correct from the first join.
+The server opens an ENet host but no client can join it, and there is no agreed handshake, so the server has no name or team preference for a peer and no way to reject a mismatched build. Disconnects (timeout, quit, kick) currently leave nothing to clean up because nothing is tracked. Max 20 slots with bots filling the rest means slot accounting has to be correct from the first join. A peer that connects while a match is running must be accepted as a spectator only; there is no mid-match spawn.
 
 ## Fix
 - `shared/net/net_messages.gd`, `class_name NetMessages`, holds the message dictionaries and the protocol version as `const PROTOCOL_VERSION := 1`. Define plain helper constructors returning `Dictionary` (cheap and printable) rather than custom classes:
