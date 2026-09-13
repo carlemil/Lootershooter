@@ -1,4 +1,4 @@
-# HIGH — Match loop: lobby → orbit → drop → match → results → lobby
+# HIGH — Match loop: lobby → warm-up → orbit → drop → match → results → lobby
 
 **Category:** zone
 **Priority:** HIGH
@@ -16,11 +16,12 @@
 `net-server-bootstrap` left a state skeleton but no actual match: no seed, no phase timings, no win condition, no results, no return to lobby. The container is supposed to loop forever — lobby, 20 s orbit pick, 5 s reentry, freefall, the match, results, lobby. There is **no hard time cap and no cash tiebreak**: the circle closes to radius 0 at 15:00 and the outside-damage ramp ends the match by attrition. The only win condition is last team alive.
 
 ## Fix
-- `shared/match/match_phase.gd`: `enum Phase { LOBBY, ORBIT, REENTRY, FREEFALL, MATCH, RESULTS }` plus `ORBIT_S = 20.0`, `REENTRY_S = 5.0`, `CIRCLE_CLOSE_S = 900.0`, `RESULTS_S = 20.0`. Note in a comment that `CIRCLE_CLOSE_S` is the circle's closing time and the HUD clock — **not** a match timeout. Shared so the client names the same phases.
+- `shared/match/match_phase.gd`: `enum Phase { LOBBY, WARMUP, ORBIT, REENTRY, FREEFALL, MATCH, RESULTS }` plus `WARMUP_TIMEOUT_S = 45.0`, `ORBIT_S = 30.0`, `REENTRY_S = 5.0`, `CIRCLE_CLOSE_S = 900.0`, `RESULTS_S = 20.0`. Note in a comment that `CIRCLE_CLOSE_S` is the circle's closing time and the HUD clock — **not** a match timeout. Shared so the client names the same phases.
 - `server/match/match_loop.gd` (server only), the single owner of phase transitions:
   - `LOBBY`: wait for ≥ 2 human players or a host timer; ask the bot filler to top up to the configured target (default 20) before leaving lobby.
   - Generate `match_seed := randi()` **once** when leaving lobby, broadcast it, and hand it to `ZoneService`, `HotZoneService` and `MoneySpawner` — one seed drives zone wander, hot zones and loot layout so replays reproduce.
-  - `ORBIT` 20 s → `REENTRY` 5 s → `FREEFALL` (ends per player on landing; the phase ends when the last player has landed or a 60 s safety timeout) → `MATCH`.
+  - `WARMUP`: server spawns loot/hot-zone state, runs 60 physics ticks with no players so bodies settle, then broadcasts `warmup_begin(match_seed)`. Clients load the world scene, instantiate one of every player/vehicle/weapon scene off-screen for one frame to precompile shaders and materials, then send `client_ready`. Leave `WARMUP` when every connected human has sent `client_ready` or after `WARMUP_TIMEOUT_S`; a client that never reports ready still drops (it just stutters). Bots are ready instantly.
+  - `ORBIT` 30 s → `REENTRY` 5 s, started for **all players on the same server tick** so everyone drops simultaneously → `FREEFALL` (ends per player on landing; the phase ends when the last player has landed or a 60 s safety timeout) → `MATCH`.
   - `MATCH` has **no end timer**. Evaluate the end condition after every death (and as a cheap once-per-second safety net): `alive_teams().size() <= 1`. One team left → that team wins and the loop moves to `RESULTS`. Zero teams left (a simultaneous wipe, e.g. two players' zone ramps expiring on the same tick) → record a **draw** with no winner and still go to `RESULTS`; never hang waiting for a winner that cannot exist.
   - Keep a display clock counting up from 0 and broadcast it; past 900 s it keeps counting ("circle closed" state on the HUD). Do not branch on it — the circle at radius 0 plus `ZoneMath.damage_per_s` reaching 100%/s after ~60 s outside is what resolves the match, typically within a minute of the close.
   - `RESULTS` 20 s showing the scoreboard, then reset everything (`CashService.reset_match()`, despawn loot/bags/hot zones, respawn players in lobby) and return to `LOBBY`. No process restart between matches — assert no leaked nodes by counting world-root children before and after.
@@ -31,7 +32,7 @@
 
 ## Acceptance
 - GUT test `tests/test_match_loop.gd` driving the loop with an injected clock and fake players:
-  - Phase order and durations: ORBIT exactly 20 s, REENTRY exactly 5 s.
+  - Phase order and durations: WARMUP ends the tick after the last `client_ready` (3 fake clients, staggered); with one client silent it ends at exactly 45 s. ORBIT exactly 30 s, REENTRY exactly 5 s, and all players' REENTRY start ticks are equal.
   - Killing all but one team at t = 120 s moves immediately to `RESULTS` with that team as winner.
   - **No timer end:** with two teams still alive at t = 1200 s (past the 900 s circle close) the phase is still `MATCH` — the loop has not ended the match and has not picked a cash winner.
   - Wiping the last two teams on the same tick yields `RESULTS` with `winner == null` and a draw flag, not a hang.

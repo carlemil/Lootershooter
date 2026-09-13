@@ -260,7 +260,7 @@
     <tr><td class="k">Stamina</td><td>A 100-point pool. Sprint −10/s, dive −25, jump −8, holding aim −2/s (sway rises under 30). Regenerates +15/s after a 1 s pause. Weight and armor tier scale the drain.</td></tr>
     <tr><td class="k">Weapons</td><td>Vietnam era only. Real projectiles: gravity and drag, per-cartridge muzzle velocity, penetration with energy loss, ricochet at shallow angles, hit-zone multipliers, armor with durability.</td></tr>
     <tr><td class="k">Vehicles</td><td>Civilian ground only. Sedan, pickup, scooter, motorcycle with sidecar, Lambro three-wheeler, tractor. Suggested: a sampan for the canals. Nothing flies.</td></tr>
-    <tr><td class="k">Drop-in</td><td>An orbital reentry screen: pick a landing spot, ride the capsule down, freefall with steering, parachute automatically at 300 m or earlier by hand. It is a state machine, not orbital mechanics.</td></tr>
+    <tr><td class="k">Drop-in</td><td>After warm-up, an orbital reentry screen: 30 s to pick a landing spot, then everyone drops at the same moment. Ride the capsule down, freefall with steering, parachute automatically at 300 m or earlier by hand. It is a state machine, not orbital mechanics.</td></tr>
     <tr><td class="k">Bots</td><td>Server-side utility AI with personality profiles. "Learning" means the server records real player heatmaps (drop picks, loot routes, engagement ranges, hot-zone timing) into a JSON that bots sample from. Difficulty knobs: reaction time, aim error, perception, decision noise.</td></tr>
     <tr><td class="k">Map</td><td>2 km × 2 km on Terrain3D. Rice paddies, jungle hills, a rubber plantation, river and canals, a small town, five hamlets, three military outposts, a bridge and a tunnel network.</td></tr>
     <tr><td class="k">Testing</td><td>GUT (Godot Unit Test). CLI: <code>godot --headless -s addons/gut/gut_cmdln.gd -gexit</code>. Tasks in <code>tasks/&lt;cat&gt;/&lt;cat&gt;-&lt;name&gt;.md</code> in the format the <code>/tdd</code> skill reads.</td></tr>
@@ -317,7 +317,8 @@
   <h3 id="s3-flow">Match flow</h3>
   <ol class="flow">
     <li><span class="t">lobby</span><div><b>Server browser → join → team select → ready</b><span>Countdown starts at two players or on the host timer. Bots fill the remaining slots. Joining after the drop puts you in spectate until the next match.</span></div></li>
-    <li><span class="t">−0:20</span><div><b>Orbit screen</b><span>Map overview. The team leader picks the drop point; teammates cluster within 150 m. Twenty seconds.</span></div></li>
+    <li><span class="t">warm-up</span><div><b>Everyone loads before anyone drops</b><span>Clients stream the map and precompile shaders behind a loading screen; the server spawns loot and lets physics settle. Ends when every client reports ready, or after 45 s. Removes the first-minute stutter.</span></div></li>
+    <li><span class="t">−0:30</span><div><b>Orbit screen</b><span>Map overview. The team leader picks the drop point; teammates cluster within 150 m. Thirty seconds, then everyone drops at once.</span></div></li>
     <li><span class="t">0:00</span><div><b>Reentry → freefall → chute</b><span>Five seconds of no control in the capsule, then freefall at up to 60 m/s with 15 m/s of lateral steer. The chute opens itself at 300 m or by hand any time above that for a glide.</span></div></li>
     <li><span class="t">0:00–15:00</span><div><b>The match</b><span>Circle shrinks from 1200 m to zero in a straight line. Center wanders. Hot zones open at 1:00, 5:00 and 9:00.</span></div></li>
     <li><span class="t">end</span><div><b>Last team alive</b><span>After 15:00 the circle is gone; the outside-damage ramp ends the match within about a minute. Scoreboard: kills, cash earned, cash spent, distance, seconds in hot zones.</span></div></li>
@@ -579,8 +580,8 @@
     [44,"M4","MEDIUM","econ-armor-helmets","vest and helmet tiers, durability, visuals"],
     [45,"M5","HIGH","zone-shrinking-circle","continuous radius to zero at 15:00, wandering center from seeded noise, cash drain and damage ramp from time outside × distance; tests"],
     [46,"M5","MEDIUM","zone-hot-zones","spawn schedule, payout falloff, growing pot; tests"],
-    [47,"M5","HIGH","zone-match-loop","lobby → orbit → drop → match → results → lobby; match clock; last team alive wins, no cap or tiebreak; death is final, late joiners spectate"],
-    [48,"M5","HIGH","zone-drop-in","orbit map pick, reentry → freefall → chute state machine with steering"],
+    [47,"M5","HIGH","zone-match-loop","lobby → warm-up → orbit (30 s) → drop → match → results → lobby; match clock; last team alive wins, no cap or tiebreak; death is final, late joiners spectate"],
+    [48,"M5","HIGH","zone-drop-in","30 s orbit map pick, simultaneous reentry → freefall → chute state machine with steering"],
     [49,"M5","MEDIUM","zone-teams-dbno","team assignment, knock-down, revive, spectate teammates"],
     [50,"M5","MEDIUM","zone-smuggler-truck","road event carrying $2500; hijack or destroy"],
     [51,"M6","HIGH","world-terrain-blockout","Terrain3D 2 km heightmap, biome splat, road splines, water volumes"],
