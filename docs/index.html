@@ -208,7 +208,7 @@
   <div class="eyebrow">
     <span>Design &amp; engineering plan</span>
     <span>Rev. 1 · 2026-09-13</span>
-    <span>Godot 4.4+ · GDScript · Docker</span>
+    <span>Godot 4.7.2 · GDScript · Docker</span>
     <span>Source of truth: README.md</span>
   </div>
   <h1 class="stencil">Looter<span>shooter</span></h1>
@@ -252,7 +252,7 @@
   <p>Four questions were put to the owner and answered; everything else follows from them. First-person only. GDScript. Scripted bots that tune themselves from recorded player data. Money that lives and dies inside one match.</p>
   <div class="tbl"><table>
     <tr><th style="width:150px">Area</th><th>Decision</th></tr>
-    <tr><td class="k">Engine</td><td>Godot 4.4+ (latest stable at scaffold time), GDScript. One project, three export presets: <code>client-windows</code>, <code>server-linux</code> and <code>server-windows</code>. Both server presets use Dedicated Server export mode and run with <code>--headless</code>; Docker ships the Linux one, the Windows one runs a match server on a Windows box without Docker.</td></tr>
+    <tr><td class="k">Engine</td><td>Godot 4.7.2 (current stable, pinned; export templates must match), GDScript. One project, three export presets: <code>client-windows</code>, <code>server-linux</code> and <code>server-windows</code>. Both server presets use Dedicated Server export mode and run with <code>--headless</code>; Docker ships the Linux one, the Windows one runs a match server on a Windows box without Docker.</td></tr>
     <tr><td class="k">Netcode</td><td>ENet through <code>MultiplayerAPI</code>. Server-authoritative. Server tick 30 Hz, client 60+ Hz. Client-side prediction with reconciliation for your own body, interpolation for everyone else, lag-compensated hit registration on the server.</td></tr>
     <tr><td class="k">Hosting</td><td>One container is one match instance: up to 20 slots, looping lobby → 15-minute match → results. Scale by running more containers. <code>docker compose</code> for local development.</td></tr>
     <tr><td class="k">Server browser</td><td>A registry service of about sixty lines of Python standard library. Game servers heartbeat every 10 s; clients fetch <code>/servers</code>. In-game list shows name, map, players, ping and mode, plus direct connect by IP.</td></tr>
@@ -500,7 +500,7 @@
   <p>Everything below is CC0 unless noted. Sketchfab models are licensed per model, so check CC0 versus CC-BY at download and credit CC-BY in <code>docs/ASSETS.md</code>.</p>
   <div class="tbl"><table>
     <tr><th style="width:160px">Need</th><th>Source</th></tr>
-    <tr><td class="k">Terrain</td><td><a href="https://tokisan.com/terrain3d/">Terrain3D</a> (MIT, Godot 4.4+, GDExtension; sculpting, texture painting, holes, foliage instancer with LODs)</td></tr>
+    <tr><td class="k">Terrain</td><td><a href="https://tokisan.com/terrain3d/">Terrain3D</a> (MIT, GDExtension, needs the 4.7-compatible build; sculpting, texture painting, holes, foliage instancer with LODs)</td></tr>
     <tr><td class="k">Textures, HDRIs</td><td><a href="https://ambientcg.com">ambientCG</a>, <a href="https://polyhaven.com">Poly Haven</a></td></tr>
     <tr><td class="k">Foliage</td><td>Poly Haven models; Quaternius <em>Ultimate Nature Pack</em>; Kenney <em>Nature Kit</em></td></tr>
     <tr><td class="k">Buildings, props</td><td>Kenney <em>City Kit</em>, <em>Furniture Kit</em>, <em>Survival Kit</em>, <em>Tower Defense</em> sandbags; KayKit bits packs; Quaternius <em>Ultimate Buildings</em>. Stilt houses and temple: OpenGameArt CC0 search, otherwise kitbashed from Kenney pieces.</td></tr>

@@ -17,7 +17,7 @@ One container must equal one match instance (up to 20 slots, lobby → 15-min ma
 
 ## Fix
 - `docker/Dockerfile`, two stages, build context = repo root (compose sets `context: ..`, `dockerfile: docker/Dockerfile`).
-- **Stage 1 `builder`**: base `barichello/godot-ci:4.4.1` (or `FROM debian:bookworm-slim` plus a downloaded `Godot_v4.4-stable_linux.x86_64` headless build and the matching `export_templates.tpz` unzipped to `/root/.local/share/godot/export_templates/<version>.stable/`). Pin the version in an `ARG GODOT_VERSION=4.4.1`.
+- **Stage 1 `builder`**: base `barichello/godot-ci:4.7.2` (or `FROM debian:bookworm-slim` plus a downloaded `Godot_v4.7.2-stable_linux.x86_64` headless build and the matching `export_templates.tpz` unzipped to `/root/.local/share/godot/export_templates/<version>.stable/`). Pin the version in an `ARG GODOT_VERSION=4.7.2`.
   - `COPY . /src`, `WORKDIR /src`, then `RUN mkdir -p /out && godot --headless --export-release "server-linux" /out/server.x86_64`.
   - Import assets first (`godot --headless --import` or a throwaway `--quit` run) so the export does not fail on a cold `.godot/` cache.
 - **Stage 2 runtime**: `FROM debian:bookworm-slim`. `RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates libfontconfig1 && rm -rf /var/lib/apt/lists/*`. Create a non-root user `game` and `WORKDIR /app`. `COPY --from=builder /out/server.x86_64 /out/server.pck /app/`, `RUN chmod +x /app/server.x86_64`, `USER game`.

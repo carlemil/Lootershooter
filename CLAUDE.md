@@ -1,6 +1,6 @@
 # Lootershooter — project conventions
 
-Godot 4.4+ (latest stable), GDScript only. One project, three export presets: `client-windows`, `server-linux` and `server-windows` (both server presets use Dedicated Server export mode and run with `--headless`; Docker uses the Linux one). Plan: `docs/plan.html` (design, served at https://carlemil.github.io/Lootershooter/); `README.md` holds only status, next task and the follow-up queue. Tasks: `tasks/<cat>/<cat>-<name>.md`.
+Godot 4.7.2 (current stable; bump deliberately, never by accident), GDScript only. One project, three export presets: `client-windows`, `server-linux` and `server-windows` (both server presets use Dedicated Server export mode and run with `--headless`; Docker uses the Linux one). Plan: `docs/plan.html` (design, served at https://carlemil.github.io/Lootershooter/); `README.md` holds only status, next task and the follow-up queue. Tasks: `tasks/<cat>/<cat>-<name>.md`.
 
 ## Layout
 
@@ -49,7 +49,11 @@ builds\windows-server\server.exe --headless -- --port=7777   # native Windows se
 docker compose -f docker/docker-compose.yml up --build
 ```
 
-`godot` must be on PATH (Godot 4.4+ console binary). If not installed yet, task `infra-godot-project` documents the install.
+`godot` must be on PATH (Godot 4.7.2 console binary; export templates must match exactly). If not installed yet, task `infra-godot-project` documents the install.
+
+## Domain skill: godot-master
+
+Use the `godot-master` skill for all Godot work. The orchestrator (session model) loads it once per session and uses its routing tables when planning tasks and writing briefs. Sub-agents never load the whole hub; each brief names the one to three reference files from it that the task needs, by path, and quotes the rules that matter into the acceptance criteria. If the skill is not installed on this machine, install it before working the first Godot task and say so in the session.
 
 ## Task workflow
 

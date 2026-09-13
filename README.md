@@ -1,6 +1,6 @@
 # Lootershooter
 
-Vietnam-era first-person battle royale with a Counter-Strike money economy. Godot 4.4+ / GDScript client and headless dedicated server (Docker), 2–20 players in teams of 1–4, a circle that closes to nothing at 15:00, player-like bots.
+Vietnam-era first-person battle royale with a Counter-Strike money economy. Godot 4.7.2 / GDScript client and headless dedicated server (Docker), 2–20 players in teams of 1–4, a circle that closes to nothing at 15:00, player-like bots.
 
 **The plan:** https://carlemil.github.io/Lootershooter/ (source: `docs/plan.html`). Design decisions, architecture, spec, free assets and the task board live there and only there. Section numbers referenced in task files (§1–§5) point to that page.
 

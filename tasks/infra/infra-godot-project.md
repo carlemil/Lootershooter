@@ -17,7 +17,7 @@
 `D:/source/Lootershooter` contains only `tasks/`, `README.md`, `CLAUDE.md`, `.gitignore` and `docs/`. There is no Godot project, so nothing can be opened, run or tested. Every later task (netcode, movement, ballistics) assumes a fixed folder layout where `shared/` runs on both client and server, `server/` is server-only, `client/` is client-only and all tunable numbers live in `data/*.json`. That layout has to exist and be enforced by convention before any code is written.
 
 ## Fix
-- Create `project.godot` for Godot **4.4+** (`config_version=5`). Set `config/name="Lootershooter"`, `config/features=PackedStringArray("4.4", "Forward Plus")`, `run/main_scene="res://client/scenes/main.tscn"` is NOT yet valid — leave `run/main_scene` empty for now; task `net-server-bootstrap` sets it.
+- Create `project.godot` for Godot **4.7.2** (`config_version=5`). Set `config/name="Lootershooter"`, `config/features=PackedStringArray("4.7", "Forward Plus")`, `run/main_scene="res://client/scenes/main.tscn"` is NOT yet valid — leave `run/main_scene` empty for now; task `net-server-bootstrap` sets it.
 - In `project.godot` set:
   - `[physics] common/physics_ticks_per_second=60` (render/physics), and add a project setting `lootershooter/net/tick_rate=30` and `lootershooter/net/snapshot_rate=20` under a custom `[lootershooter]` section so both sides read the same constants.
   - `[rendering] renderer/rendering_method="forward_plus"`, `renderer/rendering_method.mobile="gl_compatibility"`.
