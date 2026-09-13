@@ -252,7 +252,7 @@
   <p>Four questions were put to the owner and answered; everything else follows from them. First-person only. GDScript. Scripted bots that tune themselves from recorded player data. Money that lives and dies inside one match.</p>
   <div class="tbl"><table>
     <tr><th style="width:150px">Area</th><th>Decision</th></tr>
-    <tr><td class="k">Engine</td><td>Godot 4.4+ (latest stable at scaffold time), GDScript. One project, two export presets: <code>client-windows</code> and <code>server-linux</code> (Dedicated Server export mode, run with <code>--headless</code>).</td></tr>
+    <tr><td class="k">Engine</td><td>Godot 4.4+ (latest stable at scaffold time), GDScript. One project, three export presets: <code>client-windows</code>, <code>server-linux</code> and <code>server-windows</code>. Both server presets use Dedicated Server export mode and run with <code>--headless</code>; Docker ships the Linux one, the Windows one runs a match server on a Windows box without Docker.</td></tr>
     <tr><td class="k">Netcode</td><td>ENet through <code>MultiplayerAPI</code>. Server-authoritative. Server tick 30 Hz, client 60+ Hz. Client-side prediction with reconciliation for your own body, interpolation for everyone else, lag-compensated hit registration on the server.</td></tr>
     <tr><td class="k">Hosting</td><td>One container is one match instance: up to 20 slots, looping lobby → 15-minute match → results. Scale by running more containers. <code>docker compose</code> for local development.</td></tr>
     <tr><td class="k">Server browser</td><td>A registry service of about sixty lines of Python standard library. Game servers heartbeat every 10 s; clients fetch <code>/servers</code>. In-game list shows name, map, players, ping and mode, plus direct connect by IP.</td></tr>
@@ -543,7 +543,7 @@
   var T = [
     [1,"M0","HIGH","infra-godot-project","project.godot, folder layout, .gitignore, .editorconfig, git init"],
     [2,"M0","HIGH","infra-gut-tests","GUT addon, smoke test, tools/test.ps1, CI-able command"],
-    [3,"M0","HIGH","infra-export-presets","client-windows and server-linux presets, tools/export.ps1"],
+    [3,"M0","HIGH","infra-export-presets","client-windows, server-linux and server-windows presets, tools/export.ps1"],
     [4,"M0","HIGH","infra-dockerfile","multi-stage export → slim runtime; docker compose up runs a server"],
     [5,"M0","HIGH","infra-registry-service","Python stdlib registry with heartbeat and list, its Dockerfile, compose entry, one test"],
     [6,"M0","HIGH","infra-data-loader","data/*.json schema, loader autoload, test that every weapon references a known cartridge"],

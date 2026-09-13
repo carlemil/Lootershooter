@@ -1,6 +1,6 @@
 # Lootershooter — project conventions
 
-Godot 4.4+ (latest stable), GDScript only. One project, two export presets: `client-windows` and `server-linux` (Dedicated Server export mode, run with `--headless`). Plan: `docs/plan.html` (design, served at https://carlemil.github.io/Lootershooter/); `README.md` holds only status, next task and the follow-up queue. Tasks: `tasks/<cat>/<cat>-<name>.md`.
+Godot 4.4+ (latest stable), GDScript only. One project, three export presets: `client-windows`, `server-linux` and `server-windows` (both server presets use Dedicated Server export mode and run with `--headless`; Docker uses the Linux one). Plan: `docs/plan.html` (design, served at https://carlemil.github.io/Lootershooter/); `README.md` holds only status, next task and the follow-up queue. Tasks: `tasks/<cat>/<cat>-<name>.md`.
 
 ## Layout
 
@@ -42,6 +42,8 @@ godot --path . -- --connect=127.0.0.1:7777
 # exports
 tools\export.ps1 client-windows
 tools\export.ps1 server-linux
+tools\export.ps1 server-windows
+builds\windows-server\server.exe --headless -- --port=7777   # native Windows server, no Docker
 
 # docker
 docker compose -f docker/docker-compose.yml up --build
