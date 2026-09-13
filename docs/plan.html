@@ -1,0 +1,656 @@
+<title>Lootershooter Field Manual</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@600;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper: #E9E6D8;
+    --paper-2: #DFDBC8;
+    --ink: #1C2018;
+    --ink-2: #4A4E42;
+    --muted: #7C7F68;
+    --olive: #4E5B3C;
+    --olive-soft: #B9BFA3;
+    --rule: #C9C6B0;
+    --accent: #C1441F;
+    --accent-ink: #FFFFFF;
+    --good: #3F6B3A;
+    --warn: #9A6A12;
+    --code-bg: #E0DCC9;
+    --shadow: 0 1px 0 rgba(28,32,24,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #121510;
+      --paper-2: #1B2017;
+      --ink: #E2DFCF;
+      --ink-2: #BEBBA8;
+      --muted: #8E927C;
+      --olive: #A5B383;
+      --olive-soft: #3E4A33;
+      --rule: #2B3226;
+      --accent: #E8683F;
+      --accent-ink: #121510;
+      --good: #8FBF7F;
+      --warn: #D8A84A;
+      --code-bg: #1B2017;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #121510;
+    --paper-2: #1B2017;
+    --ink: #E2DFCF;
+    --ink-2: #BEBBA8;
+    --muted: #8E927C;
+    --olive: #A5B383;
+    --olive-soft: #3E4A33;
+    --rule: #2B3226;
+    --accent: #E8683F;
+    --accent-ink: #121510;
+    --good: #8FBF7F;
+    --warn: #D8A84A;
+    --code-bg: #1B2017;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", Roboto, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    padding-inline: clamp(16px, 4vw, 40px);
+    padding-block: 0 80px;
+  }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .stencil {
+    font-family: "Big Shoulders Stencil Display", "Impact", "Arial Narrow", sans-serif;
+    font-weight: 800;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .mono { font-family: "IBM Plex Mono", Consolas, "Courier New", monospace; }
+
+  /* ---------- masthead ---------- */
+  .mast {
+    max-width: 1180px; margin: 0 auto;
+    padding-block: 36px 24px;
+    border-bottom: 3px double var(--olive);
+    display: grid; gap: 18px;
+  }
+  .mast .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--olive); display: flex; flex-wrap: wrap; gap: 8px 22px;
+  }
+  .mast h1 {
+    margin: 0; font-size: clamp(44px, 8vw, 96px); line-height: .92; color: var(--ink); text-wrap: balance;
+  }
+  .mast h1 span { color: var(--accent); }
+  .mast .lede { max-width: 68ch; font-size: 18px; color: var(--ink-2); margin: 0; }
+  .specs {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0;
+    border: 1px solid var(--olive); background: var(--paper-2);
+  }
+  .specs div { padding: 10px 14px; border-right: 1px solid var(--rule); }
+  .specs div:last-child { border-right: 0; }
+  .specs b { display: block; font-family: "IBM Plex Mono", monospace; font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .specs small { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------- shell ---------- */
+  .shell { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 32px; }
+  @media (min-width: 960px) { .shell { grid-template-columns: 220px minmax(0, 1fr); gap: 48px; } }
+  nav.rail { display: none; }
+  @media (min-width: 960px) {
+    nav.rail { display: block; position: sticky; top: 24px; align-self: start; padding-top: 28px; }
+  }
+  nav.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 13.5px; }
+  nav.rail a { display: block; padding: 5px 10px; color: var(--ink-2); text-decoration: none; border-left: 2px solid var(--rule); }
+  nav.rail a:hover { color: var(--ink); border-left-color: var(--olive); }
+  nav.rail a.sub { padding-left: 22px; font-size: 12.5px; color: var(--muted); }
+  nav.rail .num { font-family: "IBM Plex Mono", monospace; color: var(--olive); margin-right: 6px; }
+
+  main { min-width: 0; }
+  section.part { padding-block: 40px 8px; border-top: 1px solid var(--rule); }
+  section.part:first-child { border-top: 0; }
+  .part-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+  .part-head .num { font-family: "Big Shoulders Stencil Display", sans-serif; font-weight: 800; font-size: 56px; line-height: 1; color: var(--olive-soft); }
+  .part-head h2 { margin: 0; font-size: 34px; line-height: 1.05; text-wrap: balance; }
+  h3 { font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--olive); margin: 32px 0 10px; font-weight: 600; }
+  h3 .tag { font-family: "IBM Plex Mono", monospace; font-weight: 400; color: var(--muted); letter-spacing: 0; text-transform: none; margin-left: 8px; }
+  p, li { max-width: 68ch; }
+  p { margin: 0 0 12px; }
+  ul, ol { padding-left: 22px; margin: 0 0 14px; }
+  li { margin-bottom: 4px; }
+  li::marker { color: var(--olive); }
+  strong { font-weight: 600; }
+  code { font-family: "IBM Plex Mono", monospace; font-size: .92em; background: var(--code-bg); padding: 1px 5px; border-radius: 2px; }
+  pre { background: var(--code-bg); border-left: 3px solid var(--olive); padding: 14px 16px; overflow-x: auto; font-size: 13px; line-height: 1.5; margin: 12px 0 18px; }
+  pre code { background: none; padding: 0; }
+
+  /* tables */
+  .tbl { overflow-x: auto; margin: 10px 0 18px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+  th { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; border-bottom: 2px solid var(--olive-soft); }
+  td.k { font-weight: 600; white-space: nowrap; color: var(--ink); }
+  td.n, th.n { text-align: right; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+
+  /* callouts */
+  .note { border: 1px solid var(--olive); background: var(--paper-2); padding: 12px 16px; margin: 14px 0 18px; max-width: 72ch; }
+  .note b { color: var(--olive); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .stamp {
+    display: inline-block; font-family: "Big Shoulders Stencil Display", sans-serif; font-weight: 800; font-size: 14px; letter-spacing: .12em;
+    color: var(--accent); border: 2px solid var(--accent); padding: 2px 8px; transform: rotate(-2deg); text-transform: uppercase;
+  }
+
+  /* timeline */
+  .flow { list-style: none; padding: 0; margin: 12px 0 18px; display: grid; gap: 0; max-width: 72ch; }
+  .flow li { display: grid; grid-template-columns: 64px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--rule); max-width: none; }
+  .flow .t { font-family: "IBM Plex Mono", monospace; color: var(--accent); font-size: 13px; padding-top: 3px; font-variant-numeric: tabular-nums; }
+  .flow b { display: block; }
+  .flow span { color: var(--ink-2); font-size: 14.5px; }
+
+  /* architecture diagram */
+  .arch { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0 18px; }
+  .box { border: 1px solid var(--olive); padding: 12px 14px; background: var(--paper-2); font-size: 14px; }
+  .box h4 { margin: 0 0 6px; font-family: "Big Shoulders Stencil Display", sans-serif; font-weight: 800; font-size: 20px; letter-spacing: .04em; text-transform: uppercase; color: var(--olive); }
+  .box ul { padding-left: 16px; margin: 0; }
+  .box li { font-size: 13.5px; margin-bottom: 2px; }
+  .wire { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--muted); margin: 0 0 16px; max-width: none; }
+
+  /* task board */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 18px; }
+  .filters button {
+    font: 600 12.5px "IBM Plex Sans", sans-serif; letter-spacing: .04em; text-transform: uppercase;
+    background: var(--paper-2); color: var(--ink-2); border: 1px solid var(--rule); padding: 6px 12px; cursor: pointer;
+  }
+  .filters button[aria-pressed="true"] { background: var(--olive); color: var(--paper); border-color: var(--olive); }
+  .ms { margin-bottom: 22px; }
+  .ms-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 2px solid var(--olive-soft); padding-bottom: 4px; margin-bottom: 4px; }
+  .ms-head .m { font-family: "Big Shoulders Stencil Display", sans-serif; font-weight: 800; font-size: 24px; color: var(--olive); letter-spacing: .04em; }
+  .ms-head .title { font-weight: 600; }
+  .ms-head .count { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  .task { display: grid; grid-template-columns: 34px 62px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--rule); font-size: 14px; }
+  .task[hidden] { display: none; }
+  .task .n { font-family: "IBM Plex Mono", monospace; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .task .id { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); }
+  .task .id small { color: var(--muted); }
+  .task .desc { color: var(--ink-2); }
+  .pri { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .08em; padding: 1px 6px; border: 1px solid; vertical-align: middle; margin-right: 6px; }
+  .pri.HIGH { color: var(--accent); border-color: var(--accent); }
+  .pri.MEDIUM { color: var(--olive); border-color: var(--olive); }
+  .pri.LOW { color: var(--muted); border-color: var(--muted); }
+  .slice { color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 11px; margin-left: 6px; }
+  @media (max-width: 560px) {
+    .task { grid-template-columns: 34px 1fr; }
+    .task .desc { grid-column: 2; }
+  }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 32px; }
+  footer { max-width: 1180px; margin: 40px auto 0; padding-top: 16px; border-top: 3px double var(--olive); font-size: 13px; color: var(--muted); }
+</style>
+
+<header class="mast">
+  <div class="eyebrow">
+    <span>Design &amp; engineering plan</span>
+    <span>Rev. 1 · 2026-09-13</span>
+    <span>Godot 4.4+ · GDScript · Docker</span>
+    <span>Source of truth: PLAN.md</span>
+  </div>
+  <h1 class="stencil">Looter<span>shooter</span></h1>
+  <p class="lede">A first-person battle royale in the Vietnam countryside where the only thing you loot is cash and the only shop is strapped to your wrist. Counter-Strike's economy, PUBG's map, 1965 hardware, a circle that closes to nothing at fifteen minutes.</p>
+  <div class="specs">
+    <div><b>2 × 2 km</b><small>Map</small></div>
+    <div><b>15:00</b><small>Circle closes at</small></div>
+    <div><b>2–20</b><small>Players + bots</small></div>
+    <div><b>1–4</b><small>Team size</small></div>
+    <div><b>$800</b><small>Starting cash</small></div>
+    <div><b>30 Hz</b><small>Server tick</small></div>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="rail" aria-label="Sections">
+  <ol>
+    <li><a href="#s1"><span class="num">1</span>Locked decisions</a></li>
+    <li><a href="#s2"><span class="num">2</span>Architecture</a></li>
+    <li><a href="#s3"><span class="num">3</span>Design spec</a></li>
+    <li><a class="sub" href="#s3-flow">Match flow</a></li>
+    <li><a class="sub" href="#s3-econ">Economy</a></li>
+    <li><a class="sub" href="#s3-store">Wrist store catalog</a></li>
+    <li><a class="sub" href="#s3-gun">Ballistics</a></li>
+    <li><a class="sub" href="#s3-move">Movement &amp; stamina</a></li>
+    <li><a class="sub" href="#s3-veh">Vehicles</a></li>
+    <li><a class="sub" href="#s3-bot">Bots</a></li>
+    <li><a class="sub" href="#s3-world">World</a></li>
+    <li><a class="sub" href="#s3-ui">UI</a></li>
+    <li><a class="sub" href="#s3-missed">What was missing</a></li>
+    <li><a href="#s4"><span class="num">4</span>Free assets</a></li>
+    <li><a href="#s5"><span class="num">5</span>Task board</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ============ 1 ============ -->
+<section class="part" id="s1">
+  <div class="part-head"><span class="num">1</span><h2 class="stencil">Locked decisions</h2></div>
+  <p>Four questions were put to the owner and answered; everything else follows from them. First-person only. GDScript. Scripted bots that tune themselves from recorded player data. Money that lives and dies inside one match.</p>
+  <div class="tbl"><table>
+    <tr><th style="width:150px">Area</th><th>Decision</th></tr>
+    <tr><td class="k">Engine</td><td>Godot 4.4+ (latest stable at scaffold time), GDScript. One project, two export presets: <code>client-windows</code> and <code>server-linux</code> (Dedicated Server export mode, run with <code>--headless</code>).</td></tr>
+    <tr><td class="k">Netcode</td><td>ENet through <code>MultiplayerAPI</code>. Server-authoritative. Server tick 30 Hz, client 60+ Hz. Client-side prediction with reconciliation for your own body, interpolation for everyone else, lag-compensated hit registration on the server.</td></tr>
+    <tr><td class="k">Hosting</td><td>One container is one match instance: up to 20 slots, looping lobby → 15-minute match → results. Scale by running more containers. <code>docker compose</code> for local development.</td></tr>
+    <tr><td class="k">Server browser</td><td>A registry service of about sixty lines of Python standard library. Game servers heartbeat every 10 s; clients fetch <code>/servers</code>. In-game list shows name, map, players, ping and mode, plus direct connect by IP.</td></tr>
+    <tr><td class="k">Perspective</td><td>First-person only. Arms and weapon viewmodel for yourself, a full-body model for everyone else.</td></tr>
+    <tr><td class="k">Players</td><td>2–20 humans; bots fill to a configurable target (default 20). Solo, duo, trio, squad.</td></tr>
+    <tr><td class="k">Match</td><td>No hard cap. At 15:00 the circle has closed to 0 m. The match then runs on for the seconds it takes the second-to-last team to bleed out from the outside-zone damage ramp. Last team standing wins. Cash on hand is a scoreboard stat, never a tiebreak.</td></tr>
+    <tr><td class="k">Zone</td><td>No phases. The safe circle shrinks continuously from 1200 m to zero at 15:00. Its center <em>wanders</em> along a smooth seeded noise path at up to 1.5 m/s, shown on the minimap 30 s ahead. Outside: cash drains, and health damage ramps with both the time you have spent outside and how far out you are, capped at 100% of your health per second: 60 s at the edge, 30 s at 200 m out, 15 s at 600 m out. Stepping back in resets the ramp. You really want to be inside.</td></tr>
+    <tr><td class="k">Hot zones</td><td>Two or three alive at a time, spawning at 1:00, 5:00 and 9:00 and living three to four minutes. Pay cash per second to everyone inside, linear falloff from center to edge. The pot grows the longer a zone lives.</td></tr>
+    <tr><td class="k">Economy</td><td>Everyone drops with $800. Income is money piles, safes, kill drops (victim's unspent cash plus a $300 bounty) and hot-zone ticks. Money is the only loot in the world. Nothing persists between matches.</td></tr>
+    <tr><td class="k">Store</td><td>A wrist device you can raise anywhere. Raising takes 1.5 s, lowers the weapon, still lets you walk. A purchase lands in your inventory only if there is a slot and the weight fits; otherwise it is refused and nothing is charged. Fixed catalog, fixed prices.</td></tr>
+    <tr><td class="k">Inventory</td><td>Two primaries, sidearm, melee, four throwables, two gadgets, armor, helmet, backpack. Backpack tier sets a weight cap for consumables and ammo; carried weight slows stamina.</td></tr>
+    <tr><td class="k">Movement</td><td>Stand, crouch-walk, prone crawl, walk, run, sprint, jump, vault or mantle up to 1.5 m, ladder climb, lean left and right, dive from sprint into prone.</td></tr>
+    <tr><td class="k">Stamina</td><td>A 100-point pool. Sprint −10/s, dive −25, jump −8, holding aim −2/s (sway rises under 30). Regenerates +15/s after a 1 s pause. Weight and armor tier scale the drain.</td></tr>
+    <tr><td class="k">Weapons</td><td>Vietnam era only. Real projectiles: gravity and drag, per-cartridge muzzle velocity, penetration with energy loss, ricochet at shallow angles, hit-zone multipliers, armor with durability.</td></tr>
+    <tr><td class="k">Vehicles</td><td>Civilian ground only. Sedan, pickup, scooter, motorcycle with sidecar, Lambro three-wheeler, tractor. Suggested: a sampan for the canals. Nothing flies.</td></tr>
+    <tr><td class="k">Drop-in</td><td>An orbital reentry screen: pick a landing spot, ride the capsule down, freefall with steering, parachute automatically at 300 m or earlier by hand. It is a state machine, not orbital mechanics.</td></tr>
+    <tr><td class="k">Bots</td><td>Server-side utility AI with personality profiles. "Learning" means the server records real player heatmaps (drop picks, loot routes, engagement ranges, hot-zone timing) into a JSON that bots sample from. Difficulty knobs: reaction time, aim error, perception, decision noise.</td></tr>
+    <tr><td class="k">Map</td><td>2 km × 2 km on Terrain3D. Rice paddies, jungle hills, a rubber plantation, river and canals, a small town, five hamlets, three military outposts, a bridge and a tunnel network.</td></tr>
+    <tr><td class="k">Testing</td><td>GUT (Godot Unit Test). CLI: <code>godot --headless -s addons/gut/gut_cmdln.gd -gexit</code>. Tasks in <code>tasks/&lt;cat&gt;/&lt;cat&gt;-&lt;name&gt;.md</code> in the format the <code>/tdd</code> skill reads.</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="part" id="s2">
+  <div class="part-head"><span class="num">2</span><h2 class="stencil">Architecture</h2></div>
+  <p>One Godot project, three runtime roles. The same <code>shared/</code> simulation code runs on the client for prediction and on the server for truth; the server alone decides damage, cash and inventory.</p>
+  <div class="arch">
+    <div class="box"><h4>Client</h4><ul><li>UI: HUD, wrist store, minimap, server browser</li><li>Viewmodels, audio, input</li><li>Predict own movement, reconcile on snapshot</li><li>Draw tracers from server events</li></ul></div>
+    <div class="box"><h4>Shared</h4><ul><li>Player controller, stamina</li><li>Ballistics, hit zones, penetration</li><li>Inventory rules, zone math</li><li>Data loader for <code>data/*.json</code></li></ul></div>
+    <div class="box"><h4>Server</h4><ul><li>Match loop, spawner, money spawner, hot zones</li><li>200 ms hitbox history for lag compensation</li><li>Bots feed the same input path as humans</li><li>Telemetry recorder, registry heartbeat</li></ul></div>
+    <div class="box"><h4>Registry</h4><ul><li>Python stdlib <code>http.server</code></li><li><code>POST /heartbeat</code> every 10 s</li><li><code>GET /servers</code> for the browser</li><li>Own container</li></ul></div>
+  </div>
+  <p class="wire">client ──input {vector, look, buttons, tick} @30Hz──▶ server ──snapshot Δ @20Hz + last acked tick──▶ client<br>client ──fire {tick, origin, dir}──▶ server rewinds hitboxes 200 ms ──▶ projectile sim ──▶ damage, tracer event</p>
+
+  <h3>Repository layout</h3>
+<pre><code>Lootershooter/
+  project.godot
+  addons/      gut/, terrain3d/
+  shared/      player controller, ballistics, inventory, zone math, data loader, net messages
+  server/      match loop, spawner, lag-comp history, money spawner, hot zones, bots/, recorder
+  client/      ui/, viewmodels, audio/, input, prediction
+  world/       map scenes, kits, navmesh, loot markers
+  data/        weapons.json, cartridges.json, items.json, prices.json, bots.json, bots_learned.json
+  tests/       GUT tests
+  docker/      Dockerfile (export stage → debian:bookworm-slim), docker-compose.yml
+  registry/    server-browser registry + Dockerfile
+  tools/       export.ps1, test.ps1, run-local-server.ps1
+  docs/        this page, ASSETS.md
+  PLAN.md      plan document with status
+  CLAUDE.md    conventions and commands
+  tasks/       one file per task</code></pre>
+
+  <h3>Rules that every task inherits</h3>
+  <ul>
+    <li>The client sends only its input and explicit requests such as <code>buy(item_id)</code>. Every economy and damage decision is made on the server.</li>
+    <li>Shared code is deterministic: fixed tick, seeded RNG only, no <code>randf()</code> in the simulation. Prediction and server must agree.</li>
+    <li>No weapon or item numbers in scripts. Everything lives in <code>data/*.json</code> behind a loader with a schema test.</li>
+    <li>Bots use the same player state and input path as humans. There is no bot-only movement or damage code, so netcode stays single-path and bots cannot cheat by construction.</li>
+    <li>One task is one revertible commit.</li>
+  </ul>
+
+  <h3>Docker</h3>
+  <p>Stage one downloads the Godot headless binary and Linux export templates and runs the <code>server-linux</code> export. Stage two is <code>debian:bookworm-slim</code> with the binary and pack, entrypoint <code>./server.x86_64 --headless -- --port=7777 --registry=http://registry:8080</code>. Compose brings up the registry and one or two game servers on mapped UDP ports.</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="part" id="s3">
+  <div class="part-head"><span class="num">3</span><h2 class="stencil">Design spec</h2></div>
+
+  <h3 id="s3-flow">Match flow</h3>
+  <ol class="flow">
+    <li><span class="t">lobby</span><div><b>Server browser → join → team select → ready</b><span>Countdown starts at two players or on the host timer. Bots fill the remaining slots.</span></div></li>
+    <li><span class="t">−0:20</span><div><b>Orbit screen</b><span>Map overview. The team leader picks the drop point; teammates cluster within 150 m. Twenty seconds.</span></div></li>
+    <li><span class="t">0:00</span><div><b>Reentry → freefall → chute</b><span>Five seconds of no control in the capsule, then freefall at up to 60 m/s with 15 m/s of lateral steer. The chute opens itself at 300 m or by hand any time above that for a glide.</span></div></li>
+    <li><span class="t">0:00–15:00</span><div><b>The match</b><span>Circle shrinks from 1200 m to zero in a straight line. Center wanders. Hot zones open at 1:00, 5:00 and 9:00.</span></div></li>
+    <li><span class="t">end</span><div><b>Last team alive</b><span>After 15:00 the circle is gone; the outside-damage ramp ends the match within about a minute. Scoreboard: kills, cash earned, cash spent, distance, seconds in hot zones.</span></div></li>
+    <li><span class="t">loop</span><div><b>Back to the lobby on the same server</b><span>Next match starts from step one.</span></div></li>
+  </ol>
+
+  <h3 id="s3-econ">Economy</h3>
+  <p>Cash is a number on the player. It is the only thing you can pick up and the only thing you can drop. It never decides a match; only survival does.</p>
+  <div class="tbl"><table>
+    <tr><th>Source</th><th class="n">Amount</th><th>Rule</th></tr>
+    <tr><td class="k">Drop</td><td class="n">$800</td><td>Everyone, every match.</td></tr>
+    <tr><td class="k">Hamlet house pile</td><td class="n">$50–150</td><td>About 300 piles across the map; roughly 40% of world value sits in the town and outposts.</td></tr>
+    <tr><td class="k">Town building pile</td><td class="n">$100–300</td><td>Market, temple, colonial blocks.</td></tr>
+    <tr><td class="k">Outpost pile</td><td class="n">$200–500</td><td>Bunkers, ammo dumps, watchtowers.</td></tr>
+    <tr><td class="k">Safe</td><td class="n">$800–1500</td><td>Five seconds to crack, loud, town and outposts only.</td></tr>
+    <tr><td class="k">Kill</td><td class="n">victim's cash + $300</td><td>Dropped as a bag that lasts 90 s. A knocked player in a team drops nothing until finished.</td></tr>
+    <tr><td class="k">Hot zone</td><td class="n">$8/s → $0/s</td><td>Per person, linear from center to edge. Four teammates at the center earn $32/s between them.</td></tr>
+    <tr><td class="k">Outside the circle</td><td class="n">−$20/s, 0 → 100% HP/s</td><td>Cash drains at a flat rate. Health damage ramps with time outside and distance from the edge: <code>t_eff = t_outside × (1 + d / 200 m)</code>, then <code>max_health × min(1, t_eff / 60)</code> per second. Caps at 100% per second: 60 s at the edge, 30 s at 200 m out, 15 s at 600 m out. Re-entering resets the ramp. A rich player still bleeds cash first.</td></tr>
+    <tr><td class="k">Rich bounty</td><td class="n">&gt; $3000</td><td>Your marker pulses on every minimap every 20 s. Spend it or carry the target.</td></tr>
+  </table></div>
+
+  <h3 id="s3-store">Wrist store catalog <span class="tag">initial prices, tune from telemetry</span></h3>
+  <div class="tbl"><table>
+    <tr><th>Category</th><th>Items</th><th class="n">$</th></tr>
+    <tr><td class="k">Pistol</td><td>M1911A1 · TT-33 · Makarov PM · S&amp;W Model 10</td><td class="n">200–300</td></tr>
+    <tr><td class="k">SMG</td><td>M3A1 Grease Gun · PPS-43 · K-50M</td><td class="n">600–800</td></tr>
+    <tr><td class="k">Shotgun</td><td>Ithaca 37 · Winchester 1897 trench</td><td class="n">700–900</td></tr>
+    <tr><td class="k">Carbine</td><td>M1 Carbine · M2 Carbine · SKS</td><td class="n">700–1100</td></tr>
+    <tr><td class="k">Rifle</td><td>M14 · M1 Garand · Mosin-Nagant M44</td><td class="n">1000–1400</td></tr>
+    <tr><td class="k">Assault rifle</td><td>M16A1 · XM177 · AK-47 · AKM · Type 56</td><td class="n">1800–2500</td></tr>
+    <tr><td class="k">LMG</td><td>M60 · RPD</td><td class="n">3200–3800</td></tr>
+    <tr><td class="k">Sniper</td><td>M40 · M21 · Mosin PU · SVD</td><td class="n">2600–4000</td></tr>
+    <tr><td class="k">Launcher</td><td>M79 · M72 LAW (one shot) · RPG-7</td><td class="n">2000–4500</td></tr>
+    <tr><td class="k">Throwable</td><td>M67 frag · F1 · M18 smoke · Mk3A2 concussion · Molotov</td><td class="n">150–400</td></tr>
+    <tr><td class="k">Placeable</td><td>M18A1 Claymore · tripwire grenade trap · toe-popper mine</td><td class="n">400–700</td></tr>
+    <tr><td class="k">Armor</td><td>Flak vest I / II / III · M1 steel helmet · helmet with visor</td><td class="n">400–1200</td></tr>
+    <tr><td class="k">Backpack</td><td>Satchel · Rucksack · ALICE pack</td><td class="n">200–600</td></tr>
+    <tr><td class="k">Healing</td><td>Bandage · First-aid kit · Morphine · Medkit</td><td class="n">50–600</td></tr>
+    <tr><td class="k">Booster</td><td>Coffee (stamina regen) · Stim (speed and regen, jitter) · Painkiller</td><td class="n">100–300</td></tr>
+    <tr><td class="k">Gadget</td><td>Binoculars · Flare gun · Flashlight · Radio (reveals the zone's next move 60 s early) · Ghillie wrap</td><td class="n">150–800</td></tr>
+    <tr><td class="k">Attachment</td><td>M84, ART and PSO-1 scopes · suppressor (rare) · bipod · drum mag · bayonet · foregrip</td><td class="n">150–1200</td></tr>
+    <tr><td class="k">Ammo</td><td>Boxes per cartridge</td><td class="n">20–80</td></tr>
+    <tr><td class="k">Vehicle</td><td>Fuel can · tire repair</td><td class="n">50–100</td></tr>
+  </table></div>
+
+  <h3 id="s3-gun">Ballistics <span class="tag">server-side, shared code</span></h3>
+  <p>Every shot is a projectile stepped once per server tick as a raycast segment, with gravity and quadratic drag. Damage comes from remaining energy, not a flat number per gun.</p>
+  <div class="tbl"><table>
+    <tr><th>Cartridge</th><th class="n">Muzzle m/s</th><th>Used by</th></tr>
+    <tr><td class="k">5.56×45</td><td class="n">990</td><td>M16A1, XM177</td></tr>
+    <tr><td class="k">7.62×39</td><td class="n">715</td><td>AK-47, AKM, Type 56, SKS, RPD</td></tr>
+    <tr><td class="k">7.62×51</td><td class="n">850</td><td>M14, M21, M60, M40</td></tr>
+    <tr><td class="k">7.62×54R</td><td class="n">830</td><td>Mosin M44, Mosin PU, SVD</td></tr>
+    <tr><td class="k">.30 Carbine</td><td class="n">600</td><td>M1 / M2 Carbine</td></tr>
+    <tr><td class="k">7.62×25</td><td class="n">450</td><td>TT-33, PPS-43, K-50M</td></tr>
+    <tr><td class="k">12 ga buck</td><td class="n">400</td><td>Ithaca 37, Winchester 1897 (8 pellets)</td></tr>
+    <tr><td class="k">9×18</td><td class="n">320</td><td>Makarov PM</td></tr>
+    <tr><td class="k">.45 ACP</td><td class="n">260</td><td>M1911A1, M3A1</td></tr>
+    <tr><td class="k">.38 Special</td><td class="n">260</td><td>S&amp;W Model 10</td></tr>
+  </table></div>
+  <div class="two">
+    <ul>
+      <li><strong>Hit zones:</strong> head 2.4, neck 1.5, chest 1.0, stomach 0.9, limbs 0.6.</li>
+      <li><strong>Armor:</strong> vest and helmet reduce by tier percentage and lose durability per hit. A tier II helmet stops pistol rounds outright.</li>
+      <li><strong>Penetration:</strong> wood 0.6, bamboo 0.7, sheet metal 0.4, brick 0.1, concrete 0, multiplied by remaining energy. One wall maximum.</li>
+      <li><strong>Ricochet:</strong> hard surface, incidence under 15°, 30% chance, keeps 40% of energy.</li>
+    </ul>
+    <ul>
+      <li><strong>Per weapon:</strong> RPM, fire modes, recoil pattern (vertical climb plus seeded horizontal), sway from stance, stamina and weight, spread for hip, aim and moving.</li>
+      <li><strong>Reload:</strong> magazines are objects. Partial mags are kept, chamber holds +1, ammo types matter.</li>
+      <li><strong>Attachments:</strong> era-correct scopes, rare suppressors, bipod, drum, foregrip, bayonet.</li>
+      <li><strong>Feel:</strong> tracers every fifth round on LMGs; supersonic crack first, report delayed by distance at 343 m/s.</li>
+    </ul>
+  </div>
+
+  <h3 id="s3-move">Movement &amp; stamina</h3>
+  <div class="two">
+    <ul>
+      <li>Stand, crouch-walk, prone crawl, walk, run, sprint.</li>
+      <li>Jump, vault or mantle ledges up to 1.5 m, ladders.</li>
+      <li>Lean left and right; leaning blocks sprint.</li>
+      <li>Dive: sprint into prone, 0.3 s of no aim.</li>
+      <li>Swim in canals: slow, weapons holstered, drop the pack to go faster.</li>
+    </ul>
+    <ul>
+      <li>Stamina 100. Sprint −10/s, dive −25, jump −8, aim hold −2/s.</li>
+      <li>Regen +15/s after 1 s without spending.</li>
+      <li>Under 30 stamina, weapon sway grows.</li>
+      <li>Weight and armor tier multiply every drain.</li>
+      <li>Prone in paddy water is invisible to bots beyond 40 m.</li>
+    </ul>
+  </div>
+
+  <h3 id="s3-veh">Vehicles <span class="tag">civilian, ground, loud</span></h3>
+  <div class="tbl"><table>
+    <tr><th>Vehicle</th><th class="n">Seats</th><th class="n">Top speed</th><th>Notes</th></tr>
+    <tr><td class="k">Sedan</td><td class="n">4</td><td class="n">90 km/h</td><td>Enclosed, fragile.</td></tr>
+    <tr><td class="k">Pickup</td><td class="n">2 + 3</td><td class="n">85 km/h</td><td>Bed passengers exposed but can shoot.</td></tr>
+    <tr><td class="k">Scooter</td><td class="n">1 + 1</td><td class="n">55 km/h</td><td>Quiet. Pillion can shoot a sidearm.</td></tr>
+    <tr><td class="k">Motorcycle + sidecar</td><td class="n">3</td><td class="n">80 km/h</td><td>Sidecar gunner with any weapon.</td></tr>
+    <tr><td class="k">Lambro three-wheeler</td><td class="n">1 + 4</td><td class="n">45 km/h</td><td>Slow, tanky, cargo bed.</td></tr>
+    <tr><td class="k">Tractor</td><td class="n">1 + 1</td><td class="n">25 km/h</td><td>Very high HP, goes anywhere.</td></tr>
+    <tr><td class="k">Sampan <em>(stretch)</em></td><td class="n">4</td><td class="n">30 km/h</td><td>Canals and river only.</td></tr>
+  </table></div>
+  <p>Arcade <code>VehicleBody3D</code> tuning, server-owned physics. Fuel 0–100, shootable tires, engines audible at 250 m, horns because it is funny.</p>
+
+  <h3 id="s3-bot">Bots <span class="tag">server-only, same input path as humans</span></h3>
+  <p>A utility scorer picks between <em>loot, move to zone, go to hot zone, engage, flank, retreat and heal, buy, drive, camp, revive</em>. Five personality profiles weight those scores: Rusher, Looter, Camper, Opportunist and Squad-follower.</p>
+  <div class="two">
+    <ul>
+      <li><strong>Perception:</strong> 110° cone with occlusion raycasts; hears gunshots at 600 m, vehicles at 250 m, footsteps at 20 m.</li>
+      <li><strong>Aim:</strong> target point plus angular error that shrinks with time on target; reaction 250–700 ms by difficulty; leads moving targets.</li>
+      <li><strong>Navigation:</strong> baked navmesh with links for vault, ladder and tunnel entrances; road spline graph for driving.</li>
+    </ul>
+    <ul>
+      <li><strong>Learning:</strong> every 2 s the server appends positions, loot events, engagement distances, drop picks and purchases to a JSONL file. An aggregator turns that into a 64×64 heat grid, loot-route popularity and buy priorities. Bots sample from those with a little noise.</li>
+      <li><strong>Knobs:</strong> reaction time, aim error, perception range, decision noise.</li>
+      <li><strong>Human things:</strong> they buy from the wrist store, drive, throw grenades, revive, and are worth spectating.</li>
+    </ul>
+  </div>
+
+  <h3 id="s3-world">World</h3>
+  <p>A 2048 m Terrain3D heightmap with hand-painted biomes and instanced foliage. Modular kits for stilt houses, huts, market stalls, a temple, colonial blocks, bunkers, sandbags, watchtowers, a bridge, tunnel segments, fences and paddy dikes.</p>
+  <div class="two">
+    <ul>
+      <li>Rice paddies: flooded, slow, hide prone players.</li>
+      <li>Jungle hills and a rubber plantation in a planted grid.</li>
+      <li>River and canals with swim volumes; one bridge.</li>
+      <li>Small town: market, temple, colonial blocks three to four floors high, safes.</li>
+    </ul>
+    <ul>
+      <li>Five hamlets of stilt houses.</li>
+      <li>Three military outposts with the richest piles.</li>
+      <li>A Cu-Chi-style tunnel network as flank routes.</li>
+      <li>Day and dusk first; monsoon rain later, masking sound and dulling bot perception.</li>
+    </ul>
+  </div>
+
+  <h3 id="s3-ui">UI</h3>
+  <ul>
+    <li><strong>HUD:</strong> health, stamina, cash, compass strip, ammo, zone timer, kill feed, team panel, knocked indicators.</li>
+    <li><strong>Maps:</strong> rotating minimap top-right; full map on M with the circle, the wander preview, hot zones, pings and bounty markers.</li>
+    <li><strong>Wrist store:</strong> a 3D wrist device with a viewport UI: category tabs, item cards, a "fits" check, confirmation.</li>
+    <li><strong>Inventory:</strong> slots, weight bar, drag and drop, attachments.</li>
+    <li><strong>Server browser:</strong> list from the registry, filters for mode and ping, refresh, direct connect.</li>
+    <li><strong>Around the match:</strong> lobby, team select, orbit pick, spectate teammates, end scoreboard.</li>
+  </ul>
+
+  <h3 id="s3-missed">What was missing from the brief <span class="tag">all added to the task board</span></h3>
+  <ol>
+    <li><strong>Sound propagation.</strong> The single biggest thing for a first-person game: gunshot falloff by distance, supersonic crack, footsteps by surface, vehicle noise, rain masking.</li>
+    <li><strong>Knock-down and revive</strong> in team modes, plus spectating.</li>
+    <li><strong>Ping system</strong> so teams work without voice.</li>
+    <li><strong>Tunnels and booby traps.</strong> Cheap area denial, strong Vietnam flavour.</li>
+    <li><strong>Smuggler truck event</strong> instead of an airdrop: a civilian truck drives a route carrying $2500. Hijack it or blow it up.</li>
+    <li><strong>Rich bounty marker</strong> above $3000, so the economy keeps cycling through the store.</li>
+    <li><strong>Radio gadget</strong> that reveals the zone's next wander: information as an item.</li>
+    <li><strong>Weather and time variants</strong> that change bot perception and sound.</li>
+    <li><strong>Swimming rules</strong> for the canals.</li>
+    <li><strong>Anti-cheat basics:</strong> server authority, input rate limits, speed and teleport sanity, fire-rate checks, a per-match seed.</li>
+    <li><strong>Kill cam and match stats</strong> from the server's own history buffer.</li>
+    <li><strong>Settings and accessibility:</strong> rebinds, field of view, sensitivity, colourblind minimap.</li>
+    <li><strong>Deterministic loot layout</strong> from the match seed, so replays and bug reports reproduce.</li>
+    <li><strong>Telemetry</strong> for tuning prices and bot difficulty, using the same recorder the bots learn from.</li>
+  </ol>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="part" id="s4">
+  <div class="part-head"><span class="num">4</span><h2 class="stencil">Free assets</h2></div>
+  <p>Everything below is CC0 unless noted. Sketchfab models are licensed per model, so check CC0 versus CC-BY at download and credit CC-BY in <code>docs/ASSETS.md</code>.</p>
+  <div class="tbl"><table>
+    <tr><th style="width:160px">Need</th><th>Source</th></tr>
+    <tr><td class="k">Terrain</td><td><a href="https://tokisan.com/terrain3d/">Terrain3D</a> (MIT, Godot 4.4+, GDExtension; sculpting, texture painting, holes, foliage instancer with LODs)</td></tr>
+    <tr><td class="k">Textures, HDRIs</td><td><a href="https://ambientcg.com">ambientCG</a>, <a href="https://polyhaven.com">Poly Haven</a></td></tr>
+    <tr><td class="k">Foliage</td><td>Poly Haven models; Quaternius <em>Ultimate Nature Pack</em>; Kenney <em>Nature Kit</em></td></tr>
+    <tr><td class="k">Buildings, props</td><td>Kenney <em>City Kit</em>, <em>Furniture Kit</em>, <em>Survival Kit</em>, <em>Tower Defense</em> sandbags; KayKit bits packs; Quaternius <em>Ultimate Buildings</em>. Stilt houses and temple: OpenGameArt CC0 search, otherwise kitbashed from Kenney pieces.</td></tr>
+    <tr><td class="k">Vehicles</td><td>Kenney <em>Car Kit</em> (sedan, pickup, tractor); Quaternius <em>Ultimate Vehicles</em> (scooter, motorbike)</td></tr>
+    <tr><td class="k">Weapons</td><td>Sketchfab: <a href="https://sketchfab.com/3d-models/low-poly-weapon-asset-pack-762c43cc1532421eb0452b64e2bdd483">Low-Poly Weapon Asset Pack</a> (M60, M16), <a href="https://sketchfab.com/3d-models/m60-machine-gun-vietnam-war-2f21855be3f545749239efaa5f1c8ff1">M60 Vietnam War</a>, <a href="https://sketchfab.com/3d-models/low-poly-ak-47-9ee0f5c01dfe4f09a61d60b450ec5117">Low Poly AK-47</a>. OpenGameArt: <a href="https://opengameart.org/content/cc0-3d-weapons">CC0 3D Weapons</a>, <a href="https://opengameart.org/content/ak-47-low-poly-weapon-pack-wip">AK-47 low-poly pack</a>. Gaps (M14, SKS, M79, PPS-43) start as Kenney <em>Blaster Kit</em> placeholders.</td></tr>
+    <tr><td class="k">Characters, arms</td><td>Quaternius <em>Universal Animated Characters</em> (rigged); KayKit character packs. First-person arms cropped from the Quaternius rig. Animations from Quaternius packs, or Mixamo (free to use in a game, not redistributable on its own).</td></tr>
+    <tr><td class="k">UI, icons, fonts</td><td>Kenney <em>UI Pack</em>, <em>Game Icons</em>, <em>Input Prompts</em>; Google Fonts</td></tr>
+    <tr><td class="k">Audio</td><td>Kenney audio packs; <a href="https://freesound.org">freesound.org</a> filtered to CC0; Sonniss GDC bundles (royalty-free) for gunshots and jungle ambience</td></tr>
+    <tr><td class="k">Skins</td><td>Recoloured texture atlases of the character pack. CC0 stays CC0.</td></tr>
+    <tr><td class="k">Server, Docker</td><td><a href="https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_dedicated_servers.html">Godot dedicated server docs</a>; <a href="https://github.com/briancain/GodotServer-Docker">GodotServer-Docker</a>; <a href="https://github.com/rivet-dev/godot-docker">rivet-dev/godot-docker</a></td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="part" id="s5">
+  <div class="part-head"><span class="num">5</span><h2 class="stencil">Task board</h2></div>
+  <p>Eighty-five tasks in eleven milestones, each one a file under <code>tasks/</code> with Files, Issue, Fix and Acceptance sections. Priority HIGH marks the critical path; <span class="slice">◆ slice</span> marks the shortest route to a first playable loop.</p>
+  <div class="note"><b>Vertical slice order</b>M0 → M1 → 15, 16, 20, 22 → 23, 24, 26, 27, 29 → 35, 36, 39, 40, 41 → 45, 47, 48 → 51 (blockout only) → 64–68 → 73, 74, 76. Everything else layers on top.</div>
+  <div class="filters" role="group" aria-label="Filter tasks">
+    <button type="button" id="f-all" data-filter="all" aria-pressed="true">All 85</button>
+    <button type="button" id="f-slice" data-filter="slice" aria-pressed="false">Vertical slice</button>
+    <button type="button" id="f-high" data-filter="HIGH" aria-pressed="false">High priority</button>
+  </div>
+  <div id="board"></div>
+</section>
+
+</main>
+</div>
+
+<footer>Lootershooter plan, revision 1. Decisions in §1 were confirmed by the project owner on 2026-09-12. Numbers in §3 are starting values and will be tuned from match telemetry.</footer>
+
+<script>
+(function () {
+  var MS = {
+    M0: "Scaffold", M1: "Netcode core", M2: "Movement & stamina", M3: "Weapons & ballistics",
+    M4: "Economy, loot, store", M5: "Zone, hot zones, match flow", M6: "World", M7: "Vehicles",
+    M8: "Bots", M9: "UI & audio", M10: "Polish & hardening"
+  };
+  var SLICE = {1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:1,15:1,16:1,20:1,22:1,23:1,24:1,26:1,27:1,29:1,35:1,36:1,39:1,40:1,41:1,45:1,47:1,48:1,51:1,64:1,65:1,66:1,67:1,68:1,73:1,74:1,76:1};
+  // [n, milestone, priority, id, summary]
+  var T = [
+    [1,"M0","HIGH","infra-godot-project","project.godot, folder layout, .gitignore, .editorconfig, git init"],
+    [2,"M0","HIGH","infra-gut-tests","GUT addon, smoke test, tools/test.ps1, CI-able command"],
+    [3,"M0","HIGH","infra-export-presets","client-windows and server-linux presets, tools/export.ps1"],
+    [4,"M0","HIGH","infra-dockerfile","multi-stage export → slim runtime; docker compose up runs a server"],
+    [5,"M0","HIGH","infra-registry-service","Python stdlib registry with heartbeat and list, its Dockerfile, compose entry, one test"],
+    [6,"M0","HIGH","infra-data-loader","data/*.json schema, loader autoload, test that every weapon references a known cartridge"],
+    [7,"M1","HIGH","net-server-bootstrap","headless detection, ENet host, args parsing, match loop skeleton"],
+    [8,"M1","HIGH","net-client-connect","connect by IP, handshake (name, team pref), disconnect handling"],
+    [9,"M1","HIGH","net-player-spawn","MultiplayerSpawner for players, server-owned PlayerState"],
+    [10,"M1","HIGH","net-input-stream","client → server input packets with tick numbers; rate limit"],
+    [11,"M1","HIGH","net-snapshot-sync","20 Hz snapshots, delta-compressed, last-acked tick"],
+    [12,"M1","HIGH","net-prediction-reconcile","local prediction plus rewind and replay; test under 150 ms simulated latency"],
+    [13,"M1","HIGH","net-lagcomp-history","200 ms hitbox ring buffer and rewind API on the server"],
+    [14,"M1","HIGH","net-registry-heartbeat","server posts heartbeat every 10 s; test"],
+    [15,"M2","HIGH","move-controller-base","CharacterBody3D shared controller: walk, run, sprint, gravity, slopes, step-up"],
+    [16,"M2","HIGH","move-stances","crouch and prone with collider changes and camera height blending"],
+    [17,"M2","MEDIUM","move-lean","Q/E lean with wall check"],
+    [18,"M2","MEDIUM","move-jump-vault-ladder","jump, mantle detection up to 1.5 m, ladders"],
+    [19,"M2","MEDIUM","move-dive","sprint → dive → prone with a no-aim window"],
+    [20,"M2","HIGH","move-stamina","pool, drains, regen, weight and armor scaling; unit tests for the maths"],
+    [21,"M2","MEDIUM","move-swim","water volumes, holster, slow, drop-pack option"],
+    [22,"M2","HIGH","move-fp-camera-arms","first-person camera, arms viewmodel, head bob, FOV setting"],
+    [23,"M3","HIGH","gun-cartridge-sim","projectile stepper with gravity, drag, per-tick raycast; tests for drop at 100 and 300 m"],
+    [24,"M3","HIGH","gun-hitzones-damage","hurtboxes, zone multipliers, armor durability; tests"],
+    [25,"M3","MEDIUM","gun-penetration-ricochet","material table, energy loss, ricochet rule; tests"],
+    [26,"M3","HIGH","gun-weapon-base","fire modes, RPM, recoil pattern, sway, spread, ADS; data-driven"],
+    [27,"M3","HIGH","gun-reload-mags","magazine objects, partial mags, chamber +1, ammo types"],
+    [28,"M3","MEDIUM","gun-attachments","scopes, suppressor, bipod, drum, foregrip, bayonet effects"],
+    [29,"M3","HIGH","gun-catalog-vietnam","every weapon in data/weapons.json with era-checked stats"],
+    [30,"M3","MEDIUM","gun-throwables","frag, F1, smoke, concussion, molotov with cook and arc preview"],
+    [31,"M3","MEDIUM","gun-placeables","claymore, tripwire trap, toe-popper"],
+    [32,"M3","MEDIUM","gun-launchers","M79, M72 LAW, RPG-7 with vehicle damage"],
+    [33,"M3","MEDIUM","gun-tracers-fx","tracers, impact decals, muzzle flash, shell casings"],
+    [34,"M3","LOW","gun-melee","knife, bayonet, butt stroke"],
+    [35,"M4","HIGH","econ-cash-state","cash on PlayerState, server-only mutation API, events; tests"],
+    [36,"M4","HIGH","econ-money-piles","marker-based spawner with building tiers, pickup interaction"],
+    [37,"M4","MEDIUM","econ-safes","5 s crack, noise event, big payout"],
+    [38,"M4","MEDIUM","econ-kill-drop","cash bag with bounty, 90 s decay"],
+    [39,"M4","HIGH","econ-inventory","slots, weight, backpack tiers, fits check; tests"],
+    [40,"M4","HIGH","econ-store-catalog","data/items.json and prices.json; server-side purchase validation"],
+    [41,"M4","HIGH","econ-wrist-store-ui","3D wrist device with SubViewport UI, raise animation, buy flow"],
+    [42,"M4","MEDIUM","econ-rich-bounty","marker pulse above $3000"],
+    [43,"M4","MEDIUM","econ-healing-boosters","bandage, kit, morphine, medkit; coffee, stim, painkiller effects"],
+    [44,"M4","MEDIUM","econ-armor-helmets","vest and helmet tiers, durability, visuals"],
+    [45,"M5","HIGH","zone-shrinking-circle","continuous radius to zero at 15:00, wandering center from seeded noise, cash drain and damage ramp from time outside × distance; tests"],
+    [46,"M5","MEDIUM","zone-hot-zones","spawn schedule, payout falloff, growing pot; tests"],
+    [47,"M5","HIGH","zone-match-loop","lobby → orbit → drop → match → results → lobby; match clock; last team alive wins, no cap or tiebreak"],
+    [48,"M5","HIGH","zone-drop-in","orbit map pick, reentry → freefall → chute state machine with steering"],
+    [49,"M5","MEDIUM","zone-teams-dbno","team assignment, knock-down, revive, spectate teammates"],
+    [50,"M5","MEDIUM","zone-smuggler-truck","road event carrying $2500; hijack or destroy"],
+    [51,"M6","HIGH","world-terrain-blockout","Terrain3D 2 km heightmap, biome splat, road splines, water volumes"],
+    [52,"M6","MEDIUM","world-kits-import","import and organise Kenney, Quaternius and Poly Haven kits; LOD, collision"],
+    [53,"M6","MEDIUM","world-town","market, temple, colonial blocks, safes"],
+    [54,"M6","MEDIUM","world-hamlets","five hamlets with stilt houses and loot markers"],
+    [55,"M6","MEDIUM","world-outposts","three outposts: bunkers, watchtowers, high-tier cash"],
+    [56,"M6","MEDIUM","world-paddies-plantation-jungle","biome dressing, foliage instancing, prone-hide volumes"],
+    [57,"M6","MEDIUM","world-rivers-bridge-tunnels","canals, bridge, tunnel network with nav links"],
+    [58,"M6","MEDIUM","world-navmesh-bake","navmesh and links for vault, ladder, tunnel; road graph for vehicles"],
+    [59,"M6","MEDIUM","world-lighting-variants","day, dusk; rain as a stretch"],
+    [60,"M7","MEDIUM","veh-base-vehiclebody","enter and exit, seats, fuel, damage, tires, engine audio hooks"],
+    [61,"M7","MEDIUM","veh-catalog","sedan, pickup, scooter, sidecar bike with gunner, Lambro, tractor"],
+    [62,"M7","MEDIUM","veh-net-sync","server-owned vehicle physics, occupant sync"],
+    [63,"M7","LOW","veh-sampan","canal boat"],
+    [64,"M8","HIGH","bot-input-adapter","bot feeds the same input path as a client"],
+    [65,"M8","HIGH","bot-perception","vision cone, occlusion, hearing events"],
+    [66,"M8","HIGH","bot-utility-brain","scorer and actions; profiles in data/bots.json"],
+    [67,"M8","HIGH","bot-navigation","navmesh moves, nav links, cover points"],
+    [68,"M8","HIGH","bot-combat","aim model with error and reaction, burst discipline, grenades, retreat and heal"],
+    [69,"M8","MEDIUM","bot-economy","loot routes, wrist-store purchases by profile"],
+    [70,"M8","MEDIUM","bot-vehicles-teams","driving, squad follow, revive"],
+    [71,"M8","MEDIUM","bot-learning-recorder","telemetry JSONL and aggregator → data/bots_learned.json"],
+    [72,"M8","MEDIUM","bot-learned-sampling","bots sample drop, loot, route and buy priors; difficulty knobs"],
+    [73,"M9","HIGH","ui-hud","health, stamina, cash, ammo, compass, killfeed, team panel"],
+    [74,"M9","HIGH","ui-minimap-fullmap","minimap, full map, zone and wander preview, hot zones, pings, bounty"],
+    [75,"M9","MEDIUM","ui-inventory","slots, weight, drag and drop, attachments"],
+    [76,"M9","HIGH","ui-server-browser","list from registry, filters, direct connect"],
+    [77,"M9","MEDIUM","ui-lobby-orbit-scoreboard","lobby, team select, orbit pick, results"],
+    [78,"M9","MEDIUM","ui-settings-keybinds","rebinds, FOV, sensitivity, audio, accessibility"],
+    [79,"M9","MEDIUM","audio-gunshots-propagation","distance tiers, supersonic crack, delayed report"],
+    [80,"M9","MEDIUM","audio-footsteps-surfaces-vehicles-ambience","surface footsteps, vehicles, jungle and rain ambience"],
+    [81,"M10","MEDIUM","polish-anticheat-sanity","speed, teleport, fire-rate and input-rate checks"],
+    [82,"M10","MEDIUM","polish-killcam-stats","5 s kill cam from server history, match stats"],
+    [83,"M10","LOW","polish-skins-recolours","atlas recolours, selection in lobby"],
+    [84,"M10","MEDIUM","polish-perf-pass","20 players plus bots at 30 Hz within budget; client 60 fps"],
+    [85,"M10","MEDIUM","polish-playtest-balance","price and damage tuning from telemetry"]
+  ];
+
+  var board = document.getElementById("board");
+  var order = Object.keys(MS);
+  var html = "";
+  order.forEach(function (m) {
+    var rows = T.filter(function (t) { return t[1] === m; });
+    html += '<div class="ms" data-ms="' + m + '"><div class="ms-head"><span class="m">' + m + '</span><span class="title">' + MS[m] + '</span><span class="count">' + rows.length + ' tasks</span></div>';
+    rows.forEach(function (t) {
+      var cat = t[3].split("-")[0];
+      html += '<div class="task" data-pri="' + t[2] + '" data-slice="' + (SLICE[t[0]] ? 1 : 0) + '">'
+        + '<span class="n">' + t[0] + '</span>'
+        + '<span class="pri ' + t[2] + '">' + t[2] + '</span>'
+        + '<span><span class="id"><small>' + cat + '/</small>' + t[3] + '.md</span>' + (SLICE[t[0]] ? '<span class="slice">◆ slice</span>' : '') + '<br><span class="desc">' + t[4] + '</span></span>'
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  board.innerHTML = html;
+
+  var buttons = document.querySelectorAll(".filters button");
+  function apply(f) {
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.filter === f ? "true" : "false"); });
+    document.querySelectorAll(".task").forEach(function (el) {
+      var show = f === "all" || (f === "slice" && el.dataset.slice === "1") || (f === "HIGH" && el.dataset.pri === "HIGH");
+      el.hidden = !show;
+    });
+    document.querySelectorAll(".ms").forEach(function (ms) {
+      var visible = ms.querySelectorAll(".task:not([hidden])").length;
+      ms.hidden = visible === 0;
+      ms.querySelector(".count").textContent = visible + " of " + ms.querySelectorAll(".task").length;
+    });
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.filter); }); });
+})();
+</script>

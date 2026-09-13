@@ -1,0 +1,15 @@
+# Godot
+.godot/
+*.import
+export/
+*.tmp
+.import/
+# Godot dedicated server build output
+build/
+# Learning telemetry
+learn/
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
