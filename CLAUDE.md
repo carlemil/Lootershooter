@@ -1,6 +1,6 @@
 # Lootershooter — project conventions
 
-Godot 4.4+ (latest stable), GDScript only. One project, two export presets: `client-windows` and `server-linux` (Dedicated Server export mode, run with `--headless`). Plan: `PLAN.md`. Tasks: `tasks/<cat>/<cat>-<name>.md`.
+Godot 4.4+ (latest stable), GDScript only. One project, two export presets: `client-windows` and `server-linux` (Dedicated Server export mode, run with `--headless`). Plan: `README.md`. Tasks: `tasks/<cat>/<cat>-<name>.md`.
 
 ## Layout
 
@@ -51,11 +51,11 @@ docker compose -f docker/docker-compose.yml up --build
 
 ## Task workflow
 
-- Work tasks in the order given in `PLAN.md` (vertical slice first). One task = one commit, message `<cat>: <short title>`.
+- Work tasks in the order given in `README.md` (vertical slice first). One task = one commit, message `<cat>: <short title>`.
 - Each task file has `## Acceptance`. Run it. Logic tasks ship a GUT test in `tests/`; scene tasks say what to open and observe.
-- When a task is done: delete its file from `tasks/`, tick it in `PLAN.md`, commit.
+- When a task is done: delete its file from `tasks/`, tick it in `README.md`, commit.
 - Sub-agents implement; the session reviews the diff and runs the test command itself before committing (see the `orchestrator` skill).
-- Out-of-scope findings go to the `Queue / follow-ups` list in `PLAN.md`, never into the current commit.
+- Out-of-scope findings go to the `Queue / follow-ups` list in `README.md`, never into the current commit.
 
 ## Assets
 

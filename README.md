@@ -1,8 +1,8 @@
-# Lootershooter — Plan
+# Lootershooter
 
 Vietnam-era first-person battle royale with a Counter-Strike money economy. Godot 4.4+ / GDScript client and headless dedicated server (Docker), 2–20 players in teams of 1–4, 15-minute matches, player-like bots.
 
-This file is the source of truth for project state. Tasks live in `tasks/<cat>/<cat>-<name>.md` (see §5); work them with the orchestrator flow described in `CLAUDE.md`. The presentation version of this plan is `docs/plan.html`.
+This file is the source of truth for project state. Tasks live in `tasks/<cat>/<cat>-<name>.md` (see §5); work them with the orchestrator flow described in `CLAUDE.md`. Web version: https://carlemil.github.io/Lootershooter/ (served from `docs/`; `docs/index.html` is generated from `docs/plan.html`, see CLAUDE.md).
 
 ## Status
 
@@ -76,7 +76,7 @@ Lootershooter/
   registry/              server browser registry (python stdlib), Dockerfile
   tools/                 export.ps1, run-local-server.ps1, bake scripts
   docs/                  plan.html (the webpage), design notes
-  PLAN.md                the plan document (orchestrator source of truth)
+  README.md                the plan document (orchestrator source of truth)
   CLAUDE.md              conventions, test command, run commands
   tasks/<cat>/*.md       small tasks
 ```
@@ -101,7 +101,7 @@ Docker:
 
 ---
 
-## 3. Design spec (what goes on the webpage and in PLAN.md)
+## 3. Design spec (what goes on the webpage and in README.md)
 
 ### 3.1 Match flow
 1. Lobby (server browser → join → team select, ready) → countdown when ≥2 players or on host timer; bots fill remaining slots.
